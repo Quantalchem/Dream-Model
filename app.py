@@ -1,8 +1,15 @@
-from flask import Flask
-
 import os
-from project import main
+import openai
 
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    main.app.run(host='0.0.0.0', port=port)
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
+response = openai.Completion.create(
+  model="text-davinci-003",
+  prompt="### Postgres SQL tables, with their properties:\n#\n# Employee(id, name, department_id)\n# Department(id, name, address)\n# Salary_Payments(id, employee_id, amount, date)\n#\n### A query to list the names of the departments which employed more than 10 employees in the last 3 months\nSELECT",
+  temperature=0,
+  max_tokens=150,
+  top_p=1,
+  frequency_penalty=0,
+  presence_penalty=0,
+  stop=["#", ";"]
+)
